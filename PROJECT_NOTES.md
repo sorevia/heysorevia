@@ -14,6 +14,8 @@
 - Stock decreases automatically when an order is placed.
 - Low-stock marketing labels like `Only 10 left`, `Only 2 left`, and `Sold out`.
 - Admin dashboard at `/admin`.
+- Razorpay test-mode checkout integration for UPI/Card.
+- Receipt download and print/PDF options after checkout and from track order.
 
 ## Important Pages
 
@@ -35,6 +37,9 @@
 - `/api/admin/dashboard` - admin analytics/products/orders data
 - `/api/admin/products` - admin product updates
 - `/api/admin/orders` - admin order/payment status updates
+- `/api/razorpay/create-order` - creates Razorpay test checkout orders
+- `/api/razorpay/verify-payment` - verifies Razorpay payment signatures
+- `/api/razorpay/webhook` - receives Razorpay payment webhook events
 
 ## Supabase Tables
 
@@ -70,6 +75,39 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-sb-publishable-key
 
 ADMIN_EMAILS=your-email@example.com
 NEXT_PUBLIC_ADMIN_EMAILS=your-email@example.com
+
+RAZORPAY_KEY_ID=rzp_test_your_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_your_key_id
+RAZORPAY_WEBHOOK_SECRET=your_test_webhook_secret
+```
+
+## Razorpay Status
+
+Razorpay is currently connected with **test keys only**.
+
+Current behavior:
+- UPI and Card open Razorpay Checkout.
+- COD still creates a normal cash-on-delivery order.
+- Successful Razorpay test payments are verified server-side.
+- Verified payments update the order to `paid` and `confirmed`.
+- Test receipts can be downloaded after checkout or later from track order.
+
+Do not use live payments until:
+- Razorpay live account/KYC is approved.
+- Live keys replace test keys in Render environment variables.
+- Webhook secret is created in Razorpay Dashboard.
+- Webhook URL is added:
+
+```text
+https://heysoreviagmail.com/api/razorpay/webhook
+```
+
+Webhook events to enable:
+
+```text
+payment.captured
+payment.failed
 ```
 
 ## Admin Dashboard

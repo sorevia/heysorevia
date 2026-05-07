@@ -9,12 +9,67 @@ import { downloadReceipt, printReceipt, type ReceiptOrder } from "@/lib/receipts
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser"
 import type { CartItem } from "@/lib/cart"
 
+type RazorpayPaymentResponse = {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
+}
+
+type RazorpayCheckoutOptions = {
+  key: string
+  amount: number
+  currency: string
+  name: string
+  description: string
+  order_id: string
+  prefill: {
+    name: string
+    email: string
+    contact: string
+  }
+  theme: {
+    color: string
+  }
+  handler: (response: RazorpayPaymentResponse) => void
+  modal: {
+    ondismiss: () => void
+  }
+}
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayCheckoutOptions) => {
+      open: () => void
+    }
+  }
+}
+
 const formatPrice = (price: number) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(price)
+
+const loadRazorpayCheckout = () =>
+  new Promise<void>((resolve, reject) => {
+    if (typeof window === "undefined") {
+      reject(new Error("Razorpay can only open in the browser."))
+      return
+    }
+
+    if (window.Razorpay) {
+      resolve()
+      return
+    }
+
+    const script = document.createElement("script")
+    script.src = "https://checkout.razorpay.com/v1/checkout.js"
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error("Could not load Razorpay checkout."))
+    document.body.appendChild(script)
+  })
 
 export default function PaymentPage() {
   const [items, setItems] = useState<CartItem[]>([])
@@ -86,6 +141,11 @@ export default function PaymentPage() {
       return
     }
 
+    if (paymentMethod !== "cod") {
+      await handleRazorpayPay()
+      return
+    }
+
     const response = await fetch("/api/orders", {
       method: "POST",
       headers: {
@@ -141,6 +201,124 @@ export default function PaymentPage() {
     setIsSuccessOverlayVisible(true)
     updateItems([])
     window.setTimeout(() => setIsSuccessOverlayVisible(false), 1800)
+  }
+
+  const handleRazorpayPay = async () => {
+    try {
+      await loadRazorpayCheckout()
+
+      const response = await fetch("/api/razorpay/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          customerName: name,
+          phone,
+          address,
+          total,
+          items: items.map((item) => ({
+            productId: item.product.id,
+            quantity: item.quantity,
+            unitPrice: item.product.price,
+          })),
+        }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        setStatus("error")
+        setMessage(data.error || "Could not start Razorpay checkout.")
+        return
+      }
+
+      const openReceipt = () => {
+        setCreatedOrderId(data.soreviaOrderId || "")
+        setReceiptOrder({
+          id: data.soreviaOrderId || `local_${Date.now()}`,
+          customerName: name,
+          customerEmail: email,
+          phone,
+          address,
+          paymentMethod: "razorpay",
+          subtotal,
+          shipping,
+          total,
+          createdAt: new Date().toISOString(),
+          items: items.map((item) => ({
+            id: item.product.id,
+            name: item.product.name,
+            tag: item.product.tag,
+            price: item.product.price,
+            quantity: item.quantity,
+          })),
+        })
+        setStatus("success")
+        setMessage("Payment verified. Your Sorevia order is confirmed.")
+        setIsSuccessOverlayVisible(true)
+        updateItems([])
+        window.setTimeout(() => setIsSuccessOverlayVisible(false), 1800)
+      }
+
+      const checkout = new window.Razorpay!({
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency || "INR",
+        name: "Sorevia",
+        description: "Premium peanut butter order",
+        order_id: data.razorpayOrderId,
+        prefill: {
+          name,
+          email,
+          contact: phone,
+        },
+        theme: {
+          color: "#174c1b",
+        },
+        handler: async (paymentResponse) => {
+          setStatus("loading")
+          setMessage("Verifying payment...")
+
+          const verifyResponse = await fetch("/api/razorpay/verify-payment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              soreviaOrderId: data.soreviaOrderId,
+              razorpayOrderId: paymentResponse.razorpay_order_id,
+              razorpayPaymentId: paymentResponse.razorpay_payment_id,
+              razorpaySignature: paymentResponse.razorpay_signature,
+            }),
+          })
+
+          const verifyData = await verifyResponse.json().catch(() => ({}))
+
+          if (!verifyResponse.ok) {
+            setStatus("error")
+            setMessage(verifyData.error || "Payment verification failed. Contact support with your payment ID.")
+            return
+          }
+
+          openReceipt()
+        },
+        modal: {
+          ondismiss: () => {
+            setStatus("error")
+            setCreatedOrderId(data.soreviaOrderId || "")
+            setMessage("Razorpay checkout was closed. Your order is reserved as payment pending.")
+          },
+        },
+      })
+
+      checkout.open()
+    } catch (error) {
+      setStatus("error")
+      setMessage(error instanceof Error ? error.message : "Could not open Razorpay checkout.")
+    }
   }
 
   return (
@@ -322,7 +500,11 @@ export default function PaymentPage() {
                 disabled={!items.length || status === "loading"}
               >
                 <CreditCard className="mr-2 h-4 w-4" />
-                {status === "loading" ? "Starting payment..." : `Pay ${formatPrice(total)}`}
+                {status === "loading"
+                  ? "Starting payment..."
+                  : paymentMethod === "cod"
+                    ? `Place COD order ${formatPrice(total)}`
+                    : `Pay with Razorpay ${formatPrice(total)}`}
               </Button>
             </form>
 
