@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: sorevia
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start -- -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      - key: NEXT_PUBLIC_ADMIN_EMAILS
+        sync: false
