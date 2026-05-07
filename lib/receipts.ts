@@ -1,4 +1,10 @@
-import type { CartItem } from "@/lib/cart"
+export type ReceiptItem = {
+  id: string
+  name: string
+  tag: string
+  price: number
+  quantity: number
+}
 
 export type ReceiptOrder = {
   id: string
@@ -11,7 +17,7 @@ export type ReceiptOrder = {
   shipping: number
   total: number
   createdAt: string
-  items: CartItem[]
+  items: ReceiptItem[]
 }
 
 const formatReceiptPrice = (price: number) =>
@@ -40,12 +46,12 @@ export function buildReceiptHtml(order: ReceiptOrder) {
       (item) => `
         <tr>
           <td>
-            <strong>${escapeHtml(item.product.name)}</strong>
-            <span>${escapeHtml(item.product.tag)}</span>
+            <strong>${escapeHtml(item.name)}</strong>
+            <span>${escapeHtml(item.tag)}</span>
           </td>
           <td>${item.quantity}</td>
-          <td>${formatReceiptPrice(item.product.price)}</td>
-          <td>${formatReceiptPrice(item.product.price * item.quantity)}</td>
+          <td>${formatReceiptPrice(item.price)}</td>
+          <td>${formatReceiptPrice(item.price * item.quantity)}</td>
         </tr>
       `,
     )

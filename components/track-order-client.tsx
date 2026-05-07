@@ -3,8 +3,9 @@
 import { FormEvent, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { ArrowLeft, CheckCircle2, MapPin, Search, Truck } from "lucide-react"
+import { ArrowLeft, CheckCircle2, Download, MapPin, Printer, Receipt, Search, Truck } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { downloadReceipt, printReceipt, type ReceiptOrder } from "@/lib/receipts"
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser"
 import { formatOrderStatus, getTrackingStepIndex, trackingSteps, type OrderHistoryItem } from "@/lib/orders"
 
@@ -16,6 +17,29 @@ export function TrackOrderClient() {
   const [message, setMessage] = useState("")
 
   const activeStep = useMemo(() => (order ? getTrackingStepIndex(order.status) : 0), [order])
+  const receiptOrder = useMemo<ReceiptOrder | null>(() => {
+    if (!order) return null
+
+    return {
+      id: order.id,
+      customerName: order.customerName,
+      customerEmail: order.customerEmail,
+      phone: order.phone,
+      address: order.address,
+      paymentMethod: order.paymentMethod,
+      subtotal: order.items.reduce((total, item) => total + item.unitPrice * item.quantity, 0),
+      shipping: Math.max(order.totalAmount - order.items.reduce((total, item) => total + item.unitPrice * item.quantity, 0), 0),
+      total: order.totalAmount,
+      createdAt: order.createdAt,
+      items: order.items.map((item) => ({
+        id: item.id,
+        name: item.product?.name || item.productId,
+        tag: item.product?.tag || "Sorevia",
+        price: item.unitPrice,
+        quantity: item.quantity,
+      })),
+    }
+  }, [order])
 
   const loadOrder = async (id: string) => {
     setStatus("loading")
@@ -136,6 +160,35 @@ export function TrackOrderClient() {
                 )
               })}
             </div>
+
+            {receiptOrder ? (
+              <div className="mt-8 rounded-2xl border border-border/70 bg-background p-5">
+                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                  <div className="flex items-start gap-3">
+                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                      <Receipt className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="font-serif text-2xl">Receipt available</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Download or print receipt #{receiptOrder.id.slice(0, 8).toUpperCase()} anytime.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button type="button" variant="outline" className="rounded-full" onClick={() => printReceipt(receiptOrder)}>
+                      <Printer className="mr-2 h-4 w-4" />
+                      Print / PDF
+                    </Button>
+                    <Button type="button" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => downloadReceipt(receiptOrder)}>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download receipt
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </section>
         ) : null}
       </div>

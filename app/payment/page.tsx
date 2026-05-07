@@ -130,7 +130,10 @@ export default function PaymentPage() {
       total,
       createdAt: new Date().toISOString(),
       items: items.map((item) => ({
-        product: item.product,
+        id: item.product.id,
+        name: item.product.name,
+        tag: item.product.tag,
+        price: item.product.price,
         quantity: item.quantity,
       })),
     })
@@ -362,11 +365,11 @@ export default function PaymentPage() {
                   </div>
                   <div className="space-y-2 py-3">
                     {receiptOrder.items.map((item) => (
-                      <div key={item.product.id} className="flex justify-between gap-4">
+                      <div key={item.id} className="flex justify-between gap-4">
                         <span className="text-muted-foreground">
-                          {item.product.name} x {item.quantity}
+                          {item.name} x {item.quantity}
                         </span>
-                        <span className="font-medium">{formatPrice(item.product.price * item.quantity)}</span>
+                        <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
                       </div>
                     ))}
                   </div>
