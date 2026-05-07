@@ -2,9 +2,10 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, CreditCard, Minus, Plus, ShieldCheck, ShoppingBag, Trash2 } from "lucide-react"
+import { ArrowLeft, CreditCard, Download, Minus, Plus, Printer, Receipt, ShieldCheck, ShoppingBag, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getCartCount, getCartTotal, readCart, writeCart } from "@/lib/cart"
+import { downloadReceipt, printReceipt, type ReceiptOrder } from "@/lib/receipts"
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser"
 import type { CartItem } from "@/lib/cart"
 
@@ -27,6 +28,7 @@ export default function PaymentPage() {
   const [createdOrderId, setCreatedOrderId] = useState("")
   const [accessToken, setAccessToken] = useState("")
   const [isSuccessOverlayVisible, setIsSuccessOverlayVisible] = useState(false)
+  const [receiptOrder, setReceiptOrder] = useState<ReceiptOrder | null>(null)
 
   const subtotal = useMemo(() => getCartTotal(items), [items])
   const shipping = subtotal >= 999 || subtotal === 0 ? 0 : 79
@@ -69,6 +71,7 @@ export default function PaymentPage() {
     setStatus("loading")
     setMessage("")
     setCreatedOrderId("")
+    setReceiptOrder(null)
 
     if (!accessToken) {
       setStatus("error")
@@ -115,6 +118,22 @@ export default function PaymentPage() {
     setStatus("success")
     const orderId = data.orderId || data.order?.id || ""
     setCreatedOrderId(orderId)
+    setReceiptOrder({
+      id: orderId || `local_${Date.now()}`,
+      customerName: name,
+      customerEmail: email,
+      phone,
+      address,
+      paymentMethod,
+      subtotal,
+      shipping,
+      total,
+      createdAt: new Date().toISOString(),
+      items: items.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+      })),
+    })
     setMessage(`Order created. Payment method selected: ${paymentMethod.toUpperCase()}.`)
     setIsSuccessOverlayVisible(true)
     updateItems([])
@@ -320,6 +339,62 @@ export default function PaymentPage() {
                 <Button asChild variant="ghost" className="rounded-full">
                   <Link href="/orders">View order history</Link>
                 </Button>
+              </div>
+            ) : null}
+            {receiptOrder ? (
+              <div className="mt-5 rounded-2xl border border-border/70 bg-background p-4">
+                <div className="flex items-start gap-3">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                    <Receipt className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-serif text-2xl">Receipt ready</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Receipt #{receiptOrder.id.slice(0, 8).toUpperCase()} is formatted for compact receipt printing.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-xl border border-dashed border-border bg-card p-4 text-sm">
+                  <div className="flex items-center justify-between border-b border-border pb-3">
+                    <span className="font-serif text-xl">SOREVIA</span>
+                    <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Receipt</span>
+                  </div>
+                  <div className="space-y-2 py-3">
+                    {receiptOrder.items.map((item) => (
+                      <div key={item.product.id} className="flex justify-between gap-4">
+                        <span className="text-muted-foreground">
+                          {item.product.name} x {item.quantity}
+                        </span>
+                        <span className="font-medium">{formatPrice(item.product.price * item.quantity)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between border-t border-border pt-3 text-base font-semibold">
+                    <span>Total</span>
+                    <span>{formatPrice(receiptOrder.total)}</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => printReceipt(receiptOrder)}
+                  >
+                    <Printer className="mr-2 h-4 w-4" />
+                    Print / PDF
+                  </Button>
+                  <Button
+                    type="button"
+                    className="rounded-full bg-primary hover:bg-primary/90"
+                    onClick={() => downloadReceipt(receiptOrder)}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download receipt
+                  </Button>
+                </div>
               </div>
             ) : null}
             <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
