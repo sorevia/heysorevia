@@ -8,7 +8,9 @@ import { MissionSection } from "@/components/mission-section"
 import { ConversionSections } from "@/components/conversion-sections"
 import { StickyCta } from "@/components/sticky-cta"
 import { Footer } from "@/components/footer"
-import { getHomeJsonLd } from "@/lib/seo"
+import { createPageMetadata, getHomeJsonLd } from "@/lib/seo"
+
+export const metadata = createPageMetadata("/")
 
 export default function Home() {
   const jsonLd = getHomeJsonLd()
