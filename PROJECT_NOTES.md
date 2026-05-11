@@ -80,7 +80,7 @@ RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
 NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_WEBHOOK_SECRET=your_test_webhook_secret
-NEXT_PUBLIC_SITE_URL=https://heysoreviagmail.com
+NEXT_PUBLIC_SITE_URL=https://heysorevia.com
 ```
 
 ## SEO Setup
@@ -109,7 +109,7 @@ Do not use live payments until:
 - Webhook URL is added:
 
 ```text
-https://heysoreviagmail.com/api/razorpay/webhook
+https://heysorevia.com/api/razorpay/webhook
 ```
 
 Webhook events to enable:
