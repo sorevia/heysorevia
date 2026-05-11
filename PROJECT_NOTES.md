@@ -80,7 +80,7 @@ RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
 NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_WEBHOOK_SECRET=your_test_webhook_secret
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
+NEXT_PUBLIC_SITE_URL=https://heysoreviagmail.com
 ```
 
 ## SEO Setup

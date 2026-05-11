@@ -1,6 +1,6 @@
 import { fallbackProducts } from "@/lib/products"
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://sorevia.com").replace(/\/$/, "")
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://heysoreviagmail.com").replace(/\/$/, "")
 
 export const brand = {
   name: "Sorevia",
