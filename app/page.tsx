@@ -8,10 +8,19 @@ import { MissionSection } from "@/components/mission-section"
 import { ConversionSections } from "@/components/conversion-sections"
 import { StickyCta } from "@/components/sticky-cta"
 import { Footer } from "@/components/footer"
+import { getHomeJsonLd } from "@/lib/seo"
 
 export default function Home() {
+  const jsonLd = getHomeJsonLd()
+
   return (
     <main className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Header />
       <HeroSection />
       <PromoSlideshow />

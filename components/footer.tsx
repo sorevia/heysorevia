@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Mail, MapPin, Phone } from "lucide-react"
+import { brand } from "@/lib/seo"
 
 const footerLinks = {
   products: [
@@ -41,15 +42,15 @@ export function Footer() {
             <div className="space-y-3 text-sm text-background/70">
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4" />
-                <span>hello@sorevia.com</span>
+                <span>{brand.email}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4" />
-                <span>+1 234 567 8900</span>
+                <span>Available on request</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4" />
-                <span>New York, USA</span>
+                <span>India</span>
               </div>
             </div>
           </div>
@@ -95,7 +96,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-background/50">© 2026 Sorevia. All rights reserved.</p>
+          <p className="text-sm text-background/50">{"\u00a9"} 2026 Sorevia. All rights reserved.</p>
           <div className="flex gap-6 text-sm text-background/50">
             <Link href="#" className="hover:text-background transition-colors">
               Legal notice

@@ -80,7 +80,16 @@ RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_test_key_secret
 NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_your_key_id
 RAZORPAY_WEBHOOK_SECRET=your_test_webhook_secret
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
+
+## SEO Setup
+
+- Global metadata is managed in `app/layout.tsx`.
+- Brand keywords, public URL, and homepage structured data are managed in `lib/seo.ts`.
+- Set `NEXT_PUBLIC_SITE_URL` to the live domain before deployment so canonical URLs, Open Graph URLs, `robots.txt`, and `sitemap.xml` point to the real website.
+- Search engines can crawl `/`, `/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`.
+- Customer, checkout, admin, and API routes are excluded from search indexing.
 
 ## Razorpay Status
 

@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { DM_Sans, Fraunces } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { brand, siteUrl } from "@/lib/seo"
 import "./globals.css"
 
 const dmSans = DM_Sans({
@@ -15,10 +16,55 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  title: "Sorevia - Premium High Protein Peanut Butter",
-  description:
-    "Shop Sorevia premium peanut butter: high protein, real peanuts, no palm oil, clean energy, bundles, subscriptions, and healthy lifestyle recipes.",
-  generator: "v0.app",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Sorevia | Premium High-Protein Peanut Butter",
+    template: "%s | Sorevia",
+  },
+  description: brand.description,
+  applicationName: brand.name,
+  keywords: brand.keywords,
+  authors: [{ name: brand.name }],
+  creator: brand.name,
+  publisher: brand.name,
+  category: "Food and beverage",
+  alternates: {
+    canonical: "/",
+  },
+  manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: brand.name,
+    title: "Sorevia | Premium High-Protein Peanut Butter",
+    description: brand.description,
+    locale: "en_IN",
+    images: [
+      {
+        url: "/images/3flavors.png",
+        width: 1200,
+        height: 630,
+        alt: "Three Sorevia premium peanut butter flavors",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sorevia | Premium High-Protein Peanut Butter",
+    description: brand.description,
+    images: ["/images/3flavors.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   icons: {
     icon: [
       {
@@ -33,6 +79,11 @@ export const metadata: Metadata = {
       },
     ],
     apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    title: brand.name,
+    capable: true,
+    statusBarStyle: "default",
   },
 }
 
