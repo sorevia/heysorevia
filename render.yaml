@@ -20,3 +20,5 @@ services:
         sync: false
       - key: NEXT_PUBLIC_ADMIN_EMAILS
         sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://heysorevia.com
