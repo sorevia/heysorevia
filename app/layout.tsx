@@ -16,7 +16,7 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL("https://heysorevia.com"),
   title: {
     default: "Sorevia | Premium High-Protein Peanut Butter",
     template: "%s | Sorevia",
@@ -29,12 +29,12 @@ export const metadata: Metadata = {
   publisher: brand.name,
   category: "Food and beverage",
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
-    url: "/",
+    url: siteUrl,
     siteName: brand.name,
     title: "Sorevia | Premium High-Protein Peanut Butter",
     description: brand.description,

@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import { fallbackProducts, type Product } from "@/lib/products"
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://heysorevia.com").replace(/\/$/, "")
+export const siteUrl = "https://heysorevia.com"
 
 export const brand = {
   name: "Sorevia",
+  alternateName: "Hey Sorevia",
   legalName: "Sorevia",
   email: "heysorevia@gmail.com",
   logo: "/logo.png",
@@ -207,11 +208,11 @@ export function getProductMetadata(product: Product): Metadata {
     title,
     description,
     alternates: {
-      canonical: path,
+      canonical: absoluteUrl(path),
     },
     openGraph: {
       type: "website",
-      url: path,
+      url: absoluteUrl(path),
       siteName: brand.name,
       title: `${title} | ${brand.name}`,
       description,
@@ -304,11 +305,11 @@ export function createPageMetadata(path: string): Metadata {
     title: seo.title,
     description: seo.description,
     alternates: {
-      canonical: path,
+      canonical: absoluteUrl(path),
     },
     openGraph: {
       type: "website",
-      url: path,
+      url: absoluteUrl(path),
       siteName: brand.name,
       title: `${seo.title} | ${brand.name}`,
       description: seo.description,
@@ -339,6 +340,7 @@ export function getHomeJsonLd() {
         "@type": "Organization",
         "@id": `${siteUrl}/#organization`,
         name: brand.name,
+        alternateName: brand.alternateName,
         legalName: brand.legalName,
         url: siteUrl,
         logo: absoluteUrl(brand.logo),

@@ -10,6 +10,7 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone()
     url.protocol = "https"
     url.hostname = primaryHost
+    url.port = ""
     return NextResponse.redirect(url, 301)
   }
 

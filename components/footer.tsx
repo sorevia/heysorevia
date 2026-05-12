@@ -96,7 +96,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-background/50">{"\u00a9"} 2026 Sorevia. All rights reserved.</p>
+          <p className="text-sm text-background/50">{"\u00a9"} Sorevia. Official website: heysorevia.com</p>
           <div className="flex gap-6 text-sm text-background/50">
             <Link href="/shipping" className="hover:text-background transition-colors">
               Shipping

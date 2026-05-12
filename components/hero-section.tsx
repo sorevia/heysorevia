@@ -77,14 +77,10 @@ export function HeroSection() {
             Premium Peanut Butter
           </p>
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium leading-[1.1] text-background text-balance mb-8">
-            <AnimatedText text="Fuel your" delay={0.2} />
-            <br />
-            <span className="text-accent">
-              <AnimatedText text="strongest ritual" delay={0.6} />
-            </span>
+            <AnimatedText text="Sorevia Peanut Butter" delay={0.2} />
           </h1>
           <p className="reveal opacity-0 animation-delay-400 text-lg text-background/90 leading-relaxed mb-10 md:text-base mr-0 pr-0">
-            Clean, high-protein peanut butter crafted for disciplined mornings, powerful workouts, and premium snacking without compromise.
+            Sorevia is a premium high-protein peanut butter brand.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
