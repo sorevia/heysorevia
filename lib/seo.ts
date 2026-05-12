@@ -141,10 +141,10 @@ export function createPageMetadata(path: string): Metadata {
       locale: "en_IN",
       images: [
         {
-          url: "/images/3flavors.png",
+          url: "/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Sorevia premium high-protein peanut butter jars",
+          alt: "Sorevia premium high-protein peanut butter",
         },
       ],
     },
@@ -152,7 +152,7 @@ export function createPageMetadata(path: string): Metadata {
       card: "summary_large_image",
       title: `${seo.title} | ${brand.name}`,
       description: seo.description,
-      images: ["/images/3flavors.png"],
+      images: ["/og-image.png"],
     },
   }
 }
@@ -167,7 +167,7 @@ export function getHomeJsonLd() {
         name: brand.name,
         legalName: brand.legalName,
         url: siteUrl,
-        logo: absoluteUrl("/apple-touch-icon.png"),
+        logo: absoluteUrl("/icon.png"),
         email: brand.email,
         description: brand.description,
         contactPoint: {

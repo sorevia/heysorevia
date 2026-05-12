@@ -41,10 +41,10 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [
       {
-        url: "/images/3flavors.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Three Sorevia premium peanut butter flavors",
+        alt: "Sorevia premium high-protein peanut butter",
       },
     ],
   },
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sorevia | Premium High-Protein Peanut Butter",
     description: brand.description,
-    images: ["/images/3flavors.png"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -68,6 +68,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        url: "/icon.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+      {
         url: "/favicon-32x32.png",
         sizes: "32x32",
         type: "image/png",
@@ -78,7 +83,19 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: [
+      {
+        url: "/apple-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
   appleWebApp: {
     title: brand.name,
