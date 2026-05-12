@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/images/", "/videos/", "/favicon.ico", "/icon.png", "/icon-512.png", "/logo.png", "/og-image.png"],
         disallow: ["/api"],
       },
     ],
