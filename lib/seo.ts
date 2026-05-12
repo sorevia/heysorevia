@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { fallbackProducts } from "@/lib/products"
+import { fallbackProducts, type Product } from "@/lib/products"
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://heysorevia.com").replace(/\/$/, "")
 
@@ -31,34 +31,88 @@ export const publicRoutes = [
     priority: 1,
   },
   {
-    url: "/signup",
+    url: "/products/classic-crunch",
     lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
   },
   {
-    url: "/login",
+    url: "/products/cocoa-strength",
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  },
+  {
+    url: "/products/honey-fit",
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  },
+  {
+    url: "/about",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    url: "/contact",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    url: "/shipping",
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   },
   {
-    url: "/forgot-password",
+    url: "/refund-policy",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  },
+  {
+    url: "/privacy-policy",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  },
+  {
+    url: "/terms",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  },
+  {
+    url: "/signup",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  },
+  {
+    url: "/login",
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.4,
   },
   {
+    url: "/forgot-password",
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.3,
+  },
+  {
     url: "/account",
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
-    priority: 0.5,
+    priority: 0.4,
   },
   {
     url: "/orders",
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
-    priority: 0.5,
+    priority: 0.4,
   },
   {
     url: "/payment",
@@ -89,6 +143,31 @@ export const pageSeo: Record<string, { title: string; description: string }> = {
     title: "Create Account",
     description: "Create a Sorevia account to save checkout details, view peanut butter orders, and track deliveries.",
   },
+  "/about": {
+    title: "About Sorevia",
+    description:
+      "Learn about Sorevia, a fitness nutrition brand making premium high-protein peanut butter with clean ingredients and natural flavor.",
+  },
+  "/contact": {
+    title: "Contact",
+    description: "Contact Sorevia for peanut butter orders, shipping questions, refunds, wholesale, and support.",
+  },
+  "/shipping": {
+    title: "Shipping Policy",
+    description: "Read Sorevia shipping information for peanut butter orders, delivery timelines, and order tracking.",
+  },
+  "/refund-policy": {
+    title: "Refund Policy",
+    description: "Read the Sorevia refund policy for peanut butter purchases, damaged items, and order support.",
+  },
+  "/privacy-policy": {
+    title: "Privacy Policy",
+    description: "Read how Sorevia handles customer data, account details, orders, and privacy for online purchases.",
+  },
+  "/terms": {
+    title: "Terms",
+    description: "Read Sorevia terms for website use, ecommerce orders, payments, shipping, and customer accounts.",
+  },
   "/login": {
     title: "Login",
     description: "Log in to your Sorevia account to manage orders, payment history, and delivery tracking.",
@@ -117,6 +196,100 @@ export const pageSeo: Record<string, { title: string; description: string }> = {
     title: "Admin Dashboard",
     description: "Sorevia admin dashboard for product, stock, order, and store management.",
   },
+}
+
+export function getProductMetadata(product: Product): Metadata {
+  const path = `/products/${product.slug}`
+  const title = `${product.name} Peanut Butter`
+  const description = `${product.description} Shop Sorevia ${product.name}, a premium high-protein peanut butter for clean ingredients, natural flavor, fitness nutrition, and everyday snacking.`
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      type: "website",
+      url: path,
+      siteName: brand.name,
+      title: `${title} | ${brand.name}`,
+      description,
+      locale: "en_IN",
+      images: [
+        {
+          url: product.image,
+          width: 1200,
+          height: 1200,
+          alt: `${brand.name} ${product.name} peanut butter`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${brand.name}`,
+      description,
+      images: [product.image],
+    },
+  }
+}
+
+export function getProductJsonLd(product: Product) {
+  const productUrl = `${siteUrl}/products/${product.slug}`
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": `${productUrl}#product`,
+        name: `${brand.name} ${product.name}`,
+        sku: product.slug,
+        description: product.description,
+        image: absoluteUrl(product.image),
+        category: "High-protein peanut butter",
+        brand: {
+          "@type": "Brand",
+          name: brand.name,
+        },
+        offers: {
+          "@type": "Offer",
+          url: productUrl,
+          priceCurrency: "INR",
+          price: product.price,
+          itemCondition: "https://schema.org/NewCondition",
+          availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          seller: {
+            "@id": `${siteUrl}/#organization`,
+          },
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${productUrl}#breadcrumbs`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Products",
+            item: `${siteUrl}/#produits`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: product.name,
+            item: productUrl,
+          },
+        ],
+      },
+    ],
+  }
 }
 
 export function absoluteUrl(path: string) {

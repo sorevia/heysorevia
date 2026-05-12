@@ -6,11 +6,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/images/", "/videos/", "/favicon.ico", "/icon.png", "/icon-512.png", "/logo.png", "/og-image.png"],
-        disallow: ["/api"],
+        allow: "/",
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
   }
 }

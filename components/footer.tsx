@@ -4,22 +4,22 @@ import { brand } from "@/lib/seo"
 
 const footerLinks = {
   products: [
-    { label: "Classic Crunch", href: "#produits" },
-    { label: "Cocoa Strength", href: "#produits" },
-    { label: "Honey Fit", href: "#produits" },
-    { label: "Combo packs", href: "#bundles" },
+    { label: "Classic Crunch", href: "/products/classic-crunch" },
+    { label: "Cocoa Strength", href: "/products/cocoa-strength" },
+    { label: "Honey Fit", href: "/products/honey-fit" },
+    { label: "Combo packs", href: "/#bundles" },
   ],
   company: [
-    { label: "Our story", href: "#mission" },
-    { label: "Ingredients", href: "#science" },
-    { label: "Gym partners", href: "#temoignages" },
-    { label: "Community", href: "#community" },
+    { label: "About", href: "/about" },
+    { label: "Ingredients", href: "/#science" },
+    { label: "Gym partners", href: "/#temoignages" },
+    { label: "Community", href: "/#community" },
   ],
   resources: [
-    { label: "Recipes", href: "#community" },
-    { label: "FAQ", href: "#" },
-    { label: "Contact", href: "#" },
-    { label: "Wholesale", href: "#bundles" },
+    { label: "Shipping", href: "/shipping" },
+    { label: "Refund Policy", href: "/refund-policy" },
+    { label: "Contact", href: "/contact" },
+    { label: "Wholesale", href: "/#bundles" },
   ],
 }
 
@@ -98,14 +98,14 @@ export function Footer() {
         <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-background/50">{"\u00a9"} 2026 Sorevia. All rights reserved.</p>
           <div className="flex gap-6 text-sm text-background/50">
-            <Link href="#" className="hover:text-background transition-colors">
-              Legal notice
+            <Link href="/shipping" className="hover:text-background transition-colors">
+              Shipping
             </Link>
-            <Link href="#" className="hover:text-background transition-colors">
+            <Link href="/privacy-policy" className="hover:text-background transition-colors">
               Privacy policy
             </Link>
-            <Link href="#" className="hover:text-background transition-colors">
-              Terms of sale
+            <Link href="/terms" className="hover:text-background transition-colors">
+              Terms
             </Link>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { MissionSection } from "@/components/mission-section"
 import { ConversionSections } from "@/components/conversion-sections"
 import { StickyCta } from "@/components/sticky-cta"
 import { Footer } from "@/components/footer"
+import { HomeSeoSection } from "@/components/home-seo-section"
 import { createPageMetadata, getHomeJsonLd } from "@/lib/seo"
 
 export const metadata = createPageMetadata("/")
@@ -31,6 +32,7 @@ export default function Home() {
       <ScienceSection />
       <TestimonialsSection />
       <MissionSection />
+      <HomeSeoSection />
       <StickyCta />
       <Footer />
     </main>

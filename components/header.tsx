@@ -60,7 +60,7 @@ export function Header() {
             <Link href="#bundles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Bundles
             </Link>
-            <Link href="#science" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/#science" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Ingredients
             </Link>
             <Link href="#temoignages" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -77,8 +77,11 @@ export function Header() {
                 Admin
               </Link>
             ) : null}
-            <Link href="#mission" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Story
+            <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              About
+            </Link>
+            <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Contact
             </Link>
           </div>
 
@@ -134,7 +137,7 @@ export function Header() {
                 Bundles
               </Link>
               <Link
-                href="#science"
+                href="/#science"
                 className="text-lg text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
@@ -171,11 +174,18 @@ export function Header() {
                 </Link>
               ) : null}
               <Link
-                href="#mission"
+                href="/about"
                 className="text-lg text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setIsOpen(false)}
               >
-                Story
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-lg text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
               </Link>
               {user ? (
                 <>

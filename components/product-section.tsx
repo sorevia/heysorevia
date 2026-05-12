@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
@@ -97,11 +98,13 @@ export function ProductSection() {
               <div className="bg-card rounded-3xl overflow-hidden border border-border/50 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 product-tilt">
                 {/* Image */}
                 <div className="relative aspect-[4/5] overflow-hidden bg-muted z-10">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
+                  <Link href={`/products/${product.slug}`}>
+                    <img
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </Link>
                   {/* End of Progressive blur effect from bottom */}
                   <span className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm text-foreground text-xs font-medium px-3 py-1.5 rounded-full z-10">
                     {product.tag}
@@ -109,7 +112,11 @@ export function ProductSection() {
                 </div>
                 {/* Content */}
                 <div className="p-6 lg:p-8">
-                  <h3 className="font-serif text-foreground mb-3 text-3xl font-normal">{product.name}</h3>
+                  <h3 className="font-serif text-foreground mb-3 text-3xl font-normal">
+                    <Link href={`/products/${product.slug}`} className="hover:text-primary">
+                      {product.name}
+                    </Link>
+                  </h3>
                   <p className="text-muted-foreground leading-relaxed mb-6">{product.description}</p>
                   <div className="mb-5 flex items-center gap-3">
                     <span className="text-lg font-semibold text-foreground">{formatPrice(product.price)}</span>
