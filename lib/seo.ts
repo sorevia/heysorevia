@@ -7,6 +7,7 @@ export const brand = {
   name: "Sorevia",
   legalName: "Sorevia",
   email: "heysorevia@gmail.com",
+  logo: "/logo.png",
   description:
     "Sorevia makes premium high-protein peanut butter with clean ingredients, natural flavor, and everyday nutrition for fitness, breakfast, snacking, and healthy routines.",
   keywords: [
@@ -167,7 +168,8 @@ export function getHomeJsonLd() {
         name: brand.name,
         legalName: brand.legalName,
         url: siteUrl,
-        logo: absoluteUrl("/icon.png"),
+        logo: absoluteUrl(brand.logo),
+        image: absoluteUrl(brand.logo),
         email: brand.email,
         description: brand.description,
         contactPoint: {
